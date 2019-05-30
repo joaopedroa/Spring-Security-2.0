@@ -13,7 +13,9 @@
     padding: 0px;
 }
 
-
+li{
+    cursor: pointer;    
+}
 .acessar-conta {
     position: relative;
     top: 10px;
