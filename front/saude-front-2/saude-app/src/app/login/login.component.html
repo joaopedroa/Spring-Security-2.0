@@ -1,0 +1,32 @@
+<div class ="row" id="content">
+  <div class = "col-sm-6">
+<form [formGroup]="formularioDeLogin" (ngSubmit)="fazerLogin()">
+    <div class="card">
+        
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+              <div class="painel">
+                  <img src="../../assets/usuario.png" alt="Smiley face" height="105" width="105">
+                  <div class="componentes">
+                    <label for="usuario">Usuário: </label>
+                    <input type="text"   class="form-control" formControlName="usuario">
+                  </div>  
+                <div class="componentes">
+                  <label for="senha">Senha: </label>
+                  <input type="password"   class="form-control"formControlName="senha">
+                </div>
+                <br>
+                <div id="button">
+                  <button  type="button" class="btn btn-success" (click)="fazerLogin()">Entrar</button>
+                </div>
+              </div> 
+          </blockquote>
+        </div>
+      </div>
+
+    <br>
+    <br>
+
+  </form>
+  </div>
+  </div>
