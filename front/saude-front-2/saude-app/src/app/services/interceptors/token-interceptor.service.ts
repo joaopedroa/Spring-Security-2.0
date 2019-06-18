@@ -3,7 +3,7 @@ import { HttpInterceptor } from '@angular/common/http';
 import { HttpRequest } from '@angular/common/http';
 import { HttpHandler } from '@angular/common/http';
 import { HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
@@ -27,16 +27,19 @@ export class TokenInterceptorService implements HttpInterceptor {
       
     })
     return next.handle(tokenRequest).pipe(
-      map((event: HttpEvent<any>) => {
-       
-        if (event instanceof HttpErrorResponse) {
-          if(event.status === 401){
+      catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+
+          if (err.status === 401 || err.status === 403) {
              this.service.logout();
              this._router.navigate(['']);
+             
           }
-         }         
-          return event;
-      }));
+
+        return throwError(err);
+        }
+      })
+     );
     }
   
 }

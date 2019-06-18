@@ -27,4 +27,8 @@ export class ServiceService {
     return this.http.post(this.url + "api/auth/signup",user);
   }
 
+  public getAllUsuarios(){
+    return this.http.get(this.url + 'api/users/getAllUsers');
+  }
+
 }

@@ -11,11 +11,15 @@ import { ServiceService } from '../services/service.service';
 export class CadastroUsuarioComponent implements OnInit {
 
   formularioDeUsuario: FormGroup;
+  allUsers:any;
 
   constructor(private fb: FormBuilder, public _service:ServiceService) { }
 
   ngOnInit() {
     this.criarFormularioDeUsuario();
+    this.getAllUsuarios();
+  
+
   }
 
   cadastrarUsuario() {
@@ -29,14 +33,21 @@ export class CadastroUsuarioComponent implements OnInit {
       dadosFormulario.senha
      
     );
-    this._service.cadastrarUsuario(usuario).subscribe(data => {
+    this._service.cadastrarUsuario(usuario).subscribe(data =>{
+    
+    }, erro =>{
      
-    }, error =>{
-      alert("usuario cadastrado com sucesso!");
-      console.log(error);
+      this.getAllUsuarios();
+     
     });
 
     this.formularioDeUsuario.reset();
+  }
+
+  getAllUsuarios(){
+    this._service.getAllUsuarios().subscribe(users =>{
+      this.allUsers = users;
+    });
   }
 
   criarFormularioDeUsuario() {

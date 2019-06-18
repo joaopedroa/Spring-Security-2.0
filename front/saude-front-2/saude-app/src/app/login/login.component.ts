@@ -33,11 +33,10 @@ export class LoginComponent implements OnInit {
     let user  = new UsuarioLogin(dadosFormulario.usuario, dadosFormulario.senha);
     
     this._service.login(user).subscribe(success =>{
-        console.log(success);
         localStorage.setItem("token", success["tokenType"] + " " + success["accessToken"] );
         this._route.navigate(["/home"]);
     }, error =>{
-      console.log(error);
+      
       alert("Usuário ou Senha incorretos.")
     });
   }
