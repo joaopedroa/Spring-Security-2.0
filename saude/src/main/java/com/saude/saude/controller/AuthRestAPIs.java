@@ -70,12 +70,12 @@ public class AuthRestAPIs {
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<String>("Fail -> Username is already taken!",
+            return new ResponseEntity<String>("Nome de usuário já existe!",
                     HttpStatus.BAD_REQUEST);
         }
  
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<String>("Fail -> Email is already in use!",
+            return new ResponseEntity<String>("E-mail já existe!",
                     HttpStatus.BAD_REQUEST);
         }
  
@@ -110,6 +110,6 @@ public class AuthRestAPIs {
         user.setRoles(roles);
         userRepository.save(user);
  
-        return ResponseEntity.ok().body("User registered successfully!");
+        return new ResponseEntity<String>("Usuário Cadastrado" + user.getName().toString() + "cadastrado com sucesso!", HttpStatus.OK);
     }
 }

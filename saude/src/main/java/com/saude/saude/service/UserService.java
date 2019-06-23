@@ -20,4 +20,11 @@ public class UserService {
 		
 	}
 	
+	public void deleteUser(Long id) {
+		this.userRepository.deleteById(id);
+	}
+	
+	public User atualizarUsuario(User user) {
+		return this.userRepository.save(user);
+	}
 }
