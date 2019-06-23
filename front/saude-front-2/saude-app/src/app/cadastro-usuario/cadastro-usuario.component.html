@@ -59,7 +59,9 @@
   </form>
   </div>
   </div>
+  <!--
   <div class="container">
+      <button mat-raised-button>I'm a button</button>
     <h2>Usuários Cadastrados</h2>         
     <table class="table table-hover">
       <thead>
@@ -85,3 +87,59 @@
       </tbody>
     </table>
   </div>
+-->
+
+<div class="search-div">
+    <h5>Usuários:</h5>
+    <mat-form-field class="search-form-field" floatLabel="never">
+       
+      <input matInput [(ngModel)]="searchKey" placeholder="Pesquisar" autocomplete="off" (keyup)="applyFilter()">
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+<div class="row" >
+   
+  <div class = 'col-sm-10' id="tableUsers">
+<div class = 'mat-elevation-z8'>
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef='name' >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+      <mat-cell *matCellDef='let element'>{{element.name}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef='username' >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Usuário</mat-header-cell>
+      <mat-cell *matCellDef='let element'>{{element.username}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef='email' >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>E-mail</mat-header-cell>
+      <mat-cell *matCellDef='let element'>{{element.email}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef='roles' >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</mat-header-cell>
+      <mat-cell *matCellDef='let element'>{{element.roles[0]['name']}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef='actions'>
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef='let row'>
+        <button mat-icon-button  (click)="editarUsuario(row)"><mat-icon>launch</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="excluirUsuario(row.id)"><mat-icon>delete_outline</mat-icon></button>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef='loading'>
+      <mat-footer-cell *matFooterCellDef colspan='6'>Carregando...</mat-footer-cell>     
+    </ng-container>
+    <ng-container matColumnDef='noData'>
+      <mat-footer-cell *matFooterCellDef colspan='6'>Não possui dados</mat-footer-cell>     
+    </ng-container>
+    <mat-header-row *matHeaderRowDef='displayedColumns'></mat-header-row>
+    <mat-row *matRowDef='let row; columns:displayedColumns; '></mat-row>
+    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':dataSource!=null}"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(dataSource!=null && dataSource.data.length==0)}"></mat-footer-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5,10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+
+</div> 
+</div>
+</div>

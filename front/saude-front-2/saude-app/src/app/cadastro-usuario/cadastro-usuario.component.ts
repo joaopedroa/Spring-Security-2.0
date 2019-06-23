@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Usuario } from '../model/Usuario';
 import { ServiceService } from '../services/service.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource,MatIconModule, MatSort} from '@angular/material';
 
 @Component({
   selector: 'app-cadastro-usuario',
@@ -12,13 +14,21 @@ export class CadastroUsuarioComponent implements OnInit {
 
   formularioDeUsuario: FormGroup;
   allUsers:any;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  displayedColumns: string[] = ['name','username','email','roles','actions'];
+  dataSource ;
+  searchKey:string;
+  salvar
 
-  constructor(private fb: FormBuilder, public _service:ServiceService) { }
+  constructor(private fb: FormBuilder, public _service:ServiceService) { 
+    this.getAllUsuarios();
+  }
 
   ngOnInit() {
     this.criarFormularioDeUsuario();
     this.getAllUsuarios();
-  
+   
 
   }
 
@@ -33,25 +43,66 @@ export class CadastroUsuarioComponent implements OnInit {
       dadosFormulario.senha
      
     );
-    this._service.cadastrarUsuario(usuario).subscribe(data =>{
+
+    if(dadosFormulario.id != null || dadosFormulario.id != undefined){
+      usuario.id = dadosFormulario.id;
+      this._service.atualizarUsuario(usuario).subscribe(data =>{
+        this.getAllUsuarios();
+      });
+    }else{
     
-    }, erro =>{
-     
+    this._service.cadastrarUsuario(usuario).subscribe(data =>{
+      console.log(data);
       this.getAllUsuarios();
+    }, erro =>{     
+      console.log(erro);
      
     });
-
+  }
     this.formularioDeUsuario.reset();
   }
 
   getAllUsuarios(){
-    this._service.getAllUsuarios().subscribe(users =>{
-      this.allUsers = users;
+    this._service.getAllUsuarios().subscribe(data =>{
+      this.allUsers =  data;      
+      this.dataSource= new MatTableDataSource(this.allUsers);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
+    
+  }
+
+  excluirUsuario(id:any){
+    this._service.excluirUsuario(id).subscribe(data=>{
+      alert("Usuário excluído com sucesso!!!");
+      this.getAllUsuarios();
+    });
+  }
+
+  editarUsuario(user:Usuario){
+    this.formularioDeUsuario.setValue({
+      id:  user['id'],
+      nome :  user['name'],
+      email : user['email'],
+      usuario: user['username'],
+      senha: ''
+
+    });
+
+  }
+
+  onSearchClear(){
+    this.searchKey = "";
+    this.applyFilter();
+  }
+
+  applyFilter(){
+    this.dataSource.filter = this.searchKey.trim().toLowerCase();
   }
 
   criarFormularioDeUsuario() {
     this.formularioDeUsuario = this.fb.group({
+      id: [''],
       nome: ['',
       Validators.compose([
         Validators.required,

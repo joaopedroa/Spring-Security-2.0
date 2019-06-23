@@ -13,7 +13,10 @@ import { ServiceService } from './services/service.service';
 import { AuthGuard } from './services/auth/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { TokenInterceptorService } from './services/interceptors/token-interceptor.service';
+import {MatTableModule} from '@angular/material/table';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +32,14 @@ import { TokenInterceptorService } from './services/interceptors/token-intercept
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatInputModule, 
+    MatButtonModule,
+    MatSelectModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     ServiceService,

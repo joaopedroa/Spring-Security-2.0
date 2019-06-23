@@ -8,7 +8,7 @@ export class Usuario {
       this.role = [role];
 
     }
-  
+    id:any;
     name: string;
     email: string;
     username: string;

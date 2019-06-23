@@ -31,4 +31,12 @@ export class ServiceService {
     return this.http.get(this.url + 'api/users/getAllUsers');
   }
 
+  public excluirUsuario(id:any){
+    return this.http.delete(this.url + 'api/users/deleteUser/' + id);
+  }
+
+  public atualizarUsuario(user:Usuario){
+    return this.http.put(this.url + 'api/users/atualizaruser/', user);
+  }
+
 }
