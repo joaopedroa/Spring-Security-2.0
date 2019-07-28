@@ -4,6 +4,7 @@ import { Usuario } from '../model/Usuario';
 import { ServiceService } from '../services/service.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource,MatIconModule, MatSort} from '@angular/material';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cadastro-usuario',
@@ -44,22 +45,31 @@ export class CadastroUsuarioComponent implements OnInit {
      
     );
 
-    if(dadosFormulario.id != null || dadosFormulario.id != undefined){
+    if(dadosFormulario.id){
       usuario.id = dadosFormulario.id;
       this._service.atualizarUsuario(usuario).subscribe(data =>{
+        this._service.showNotify("success", "Usuário atualizado com sucesso!" );
         this.getAllUsuarios();
       });
     }else{
     
     this._service.cadastrarUsuario(usuario).subscribe(data =>{
+      this._service.showNotify("success", "Usuário cadastrado com sucesso!" );
       console.log(data);
       this.getAllUsuarios();
     }, erro =>{     
-      console.log(erro);
+      if(erro['status'] != 200){
+        this._service.showNotify('error',erro.error);
+        console.log(erro);
+      }else{
+        this._service.showNotify("success", "Usuário cadastrado com sucesso!" );
+      }
+     
      
     });
   }
     this.formularioDeUsuario.reset();
+    
   }
 
   getAllUsuarios(){
@@ -73,10 +83,30 @@ export class CadastroUsuarioComponent implements OnInit {
   }
 
   excluirUsuario(id:any){
-    this._service.excluirUsuario(id).subscribe(data=>{
-      alert("Usuário excluído com sucesso!!!");
-      this.getAllUsuarios();
-    });
+
+    Swal.fire({
+      title: 'Tem certeza que deseja excluir este usuário?',
+      text: "A operação não poderá ser revertida!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, excluir!'
+    }).then((result) => {
+      if (result.value) {
+        this._service.excluirUsuario(id).subscribe(data=>{
+          this._service.showNotify("success", "Usuário excluído com sucesso!!!" ); 
+          Swal.fire(
+            'Excluído!',
+            'O usuário foi deletado.',
+            'success'
+          )
+          this.getAllUsuarios();
+
+        });
+      }
+    })
+   
   }
 
   editarUsuario(user:Usuario){

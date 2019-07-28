@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,9 @@ public class UsuarioController {
 	@Autowired
     RoleRepository roleRepository;
 	
+	@Autowired
+    PasswordEncoder encoder;
+	
 	@GetMapping("/getAllUsers")
 	public ResponseEntity<List<User>> findAllUsers() {
 		
@@ -59,6 +63,7 @@ public class UsuarioController {
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
 		roles.add(role);
 		usuario.setRoles(roles);
+		usuario.setPassword(encoder.encode(usuario.getPassword()));
 		User userAtualizado = userService.atualizarUsuario(usuario);
 		return new ResponseEntity<User>(userAtualizado,HttpStatus.OK);
 	}

@@ -30,7 +30,8 @@ export class TokenInterceptorService implements HttpInterceptor {
       catchError(err => {
         if (err instanceof HttpErrorResponse) {
 
-          if (err.status === 401 || err.status === 403) {
+          if ((err.status === 401 && err.error.path != "/api/auth/signin") || err.status === 403) {
+            this.service.showNotify('warning',"Sessão expirada.");
              this.service.logout();
              this._router.navigate(['']);
              
